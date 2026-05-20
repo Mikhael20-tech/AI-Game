@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Gerak AI - Game Edukasi Interaktif</title>
+    <meta name="description" content="Kuis Gerak AI adalah game edukasi interaktif menggunakan kecerdasan buatan berbasis pose tubuh. Jawab soal dengan menggerakkan tubuhmu!">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <header>
+            <h1>KUIS GERAK AI</h1>
+            <p class="subtitle">Game Edukasi Interaktif Berbasis Deteksi Pose</p>
+        </header>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div class="info-panel">
+            <div class="badge" id="skor-badge">
+                <span class="badge-label">Skor</span>
+                <span id="skor-val">0</span>
+            </div>
+            <div class="badge" id="timer-badge">
+                <span class="badge-label">Waktu</span>
+                <span id="timer-val">10</span>
+            </div>
+        </div>
+
+        <div id="soal-card">
+            <div id="soal" class="empty-state">Silakan klik tombol di bawah untuk memulai kamera dan memuat game AI...</div>
+        </div>
+        
+        <div id="pesan-feedback"></div>
+        
+        <div class="camera-card" id="webcam-container">
+            <div id="overlay-transisi">
+                <p id="angka-countdown">3</p>
+                <p id="teks-peringatan">Ambil Posisi & Bersiap!</p>
+            </div>
+            
+            <div id="loading-msg" style="display:none;">
+                <div class="spinner"></div>
+                <span>Mempersiapkan AI Pose...</span>
+            </div>
+        </div>
+        
+        <div class="status-box" id="label-container">
+            HUD Klasifikasi AI akan muncul di sini...
+        </div>
+
+        <div class="btn-container">
+            <button id="btn-start" type="button" onclick="mulaiKuis()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Mulai Kamera & Game
+            </button>
+        </div>
+    </div>
+
+    <!-- TensorFlow & Teachable Machine Pose Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    
+    <!-- Game Logic JS -->
+    <script src="script.js"></script>
+</body>
+</html>
