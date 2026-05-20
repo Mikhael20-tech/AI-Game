@@ -101,6 +101,7 @@ header {
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding-bottom: 15px;
+    position: relative;
 }
 
 h1 {
@@ -116,6 +117,38 @@ h1 {
 .subtitle {
     font-size: 14px;
     color: var(--text-secondary);
+}
+
+/* Guide Button */
+.btn-guide {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    width: auto; /* Mengikuti panjang teks */
+    height: 40px;
+    padding: 0 16px; /* Memberikan ruang di kiri dan kanan */
+    border: none;
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--text-primary);
+    border-radius: 20px; /* Membuat bentuk pill/kapsul */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Jarak antara ikon dan teks */
+    transition: var(--transition);
+    font-size: 14px; /* Memunculkan teks (sebelumnya 0) */
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-guide:hover {
+    background: var(--primary);
+    transform: scale(1.05); /* Sedikit dikurangi dari 1.1 agar tidak terlalu besar melompatnya karena tombol sekarang lebih lebar */
+}
+
+.btn-guide:active {
+    transform: scale(0.95);
 }
 
 /* Info Panel */
@@ -411,6 +444,47 @@ button:active {
     transition: width 0.3s ease;
 }
 
+/* Guide Modal Overlay */
+.guide-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.guide-modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.guide-iframe {
+    width: 100%;
+    height: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    border: none;
+    border-radius: 16px;
+    background: var(--card-bg);
+}
+
 /* Mobile responsive fixes */
 @media (max-width: 600px) {
     #game-container {
@@ -432,5 +506,406 @@ button:active {
     }
     #angka-countdown {
         font-size: 70px;
+    }
+}
+
+/* ============================================ */
+/* PANDUAN GAME - Guide Styles */
+/* ============================================ */
+
+/* Guide Container */
+#guide-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Guide Header */
+.guide-header {
+    position: relative;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+    border-bottom: 1px solid var(--card-border);
+    border-radius: 16px 16px 0 0;
+}
+
+.guide-header h1 {
+    font-size: 2em;
+    font-weight: 800;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.guide-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+    margin: 0;
+}
+
+/* Close Button */
+.btn-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: auto;
+    height: 40px;
+    padding: 0 16px;
+    border: none;
+    background: rgba(244, 63, 94, 0.15); /* Pakai warna danger/merah transparan */
+    color: var(--danger);
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-close:hover {
+    background: var(--danger);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+}
+
+.btn-close:active {
+    transform: scale(0.95);
+}
+
+/* Guide Content */
+.guide-content {
+    overflow-y: auto;
+    padding: 30px;
+    flex: 1;
+}
+
+/* Scrollbar Styling */
+.guide-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.guide-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.guide-content::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+.guide-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}
+
+/* Guide Sections */
+.guide-section {
+    margin-bottom: 40px;
+}
+
+.guide-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-body {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.section-body p {
+    margin: 0;
+    font-size: 0.95em;
+}
+
+/* Steps */
+.step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: rgba(139, 92, 246, 0.05);
+    border-left: 3px solid var(--primary);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.step:hover {
+    background: rgba(139, 92, 246, 0.1);
+    transform: translateX(4px);
+}
+
+.step-number {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 1em;
+}
+
+.step-content p {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+/* Pose Grid */
+.pose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.pose-card {
+    padding: 20px;
+    background: rgba(6, 182, 212, 0.05);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    border-radius: 12px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.pose-card:hover {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: var(--accent-cyan);
+    transform: translateY(-4px);
+}
+
+.pose-icon {
+    font-size: 2.5em;
+    margin-bottom: 12px;
+}
+
+.pose-card h4 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 0.95em;
+}
+
+.pose-card p {
+    margin: 0;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+/* Tips List */
+.tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tips-list li {
+    padding: 12px;
+    margin-bottom: 12px;
+    background: rgba(16, 185, 129, 0.05);
+    border-left: 3px solid var(--success);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+/* Point Table */
+.point-table {
+    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.point-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.point-row:last-child {
+    border-bottom: none;
+}
+
+.point-label {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+.point-value {
+    font-weight: 700;
+    color: var(--accent-cyan);
+    font-size: 1em;
+}
+
+/* FAQ Items */
+.faq-item {
+    padding: 16px;
+    margin-bottom: 12px;
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.faq-item:hover {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.faq-item h4 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 0.95em;
+}
+
+.faq-item p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #guide-container {
+        border-radius: 12px;
+    }
+
+    .guide-header {
+        padding: 20px;
+    }
+
+    .guide-header h1 {
+        font-size: 1.5em;
+    }
+
+    .guide-content {
+        padding: 20px;
+    }
+
+    .guide-section {
+        margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+        font-size: 1.25em;
+    }
+
+    .pose-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+    }
+
+    .step {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .pose-icon {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    #guide-container {
+        max-height: 95vh;
+    }
+
+    .guide-header {
+        padding: 16px;
+    }
+
+    .guide-header h1 {
+        font-size: 1.25em;
+    }
+
+    .guide-content {
+        padding: 16px;
+    }
+
+    .section-header h2 {
+        font-size: 1.1em;
+    }
+
+    .pose-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .btn-primary {
+        width: 100%;
     }
 }

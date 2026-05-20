@@ -387,3 +387,111 @@ function mulaiKuis() {
     appKuis.init();
 }
 window.mulaiKuis = mulaiKuis; // Expose globally for HTML onclick
+
+/* ============================================ */
+/* PANDUAN GAME - Guide Handler & Controller */
+/* ============================================ */
+
+// Guide Handler - Menangani pembukaan dan penutupan panduan modal
+document.addEventListener('DOMContentLoaded', function() {
+    const btnGuide = document.getElementById('btn-guide');
+    const guideModalOverlay = document.getElementById('guide-modal-overlay');
+    const guideIframe = document.getElementById('guide-iframe');
+
+    // Buka Panduan
+    if (btnGuide) {
+        btnGuide.addEventListener('click', function() {
+            if (guideModalOverlay) {
+                guideModalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+
+    // Tutup Panduan saat klik di luar iframe
+    if (guideModalOverlay) {
+        guideModalOverlay.addEventListener('click', function(e) {
+            if (e.target === guideModalOverlay) {
+                closeGuide();
+            }
+        });
+    }
+
+    // Listen untuk pesan dari iframe
+    window.addEventListener('message', function(e) {
+        if (e.data === 'closeGuide') {
+            closeGuide();
+        }
+    });
+
+    // Tutup dengan ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && guideModalOverlay && guideModalOverlay.classList.contains('active')) {
+            closeGuide();
+        }
+    });
+
+    function closeGuide() {
+        if (guideModalOverlay) {
+            guideModalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
+});
+
+// Guide.js - Panduan Game Modal Controller
+// Show Guide Modal
+function showGuide() {
+    const gameContainer = document.getElementById('game-container');
+    const guideContainer = document.getElementById('guide-container');
+    
+    if (gameContainer && guideContainer) {
+        gameContainer.style.display = 'none';
+        guideContainer.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Hide Guide Modal & Send message to parent
+function hideGuide() {
+    const gameContainer = document.getElementById('game-container');
+    const guideContainer = document.getElementById('guide-container');
+    
+    if (gameContainer && guideContainer) {
+        guideContainer.style.display = 'none';
+        gameContainer.style.display = 'flex';
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Kirim pesan ke parent window untuk menutup modal
+    if (window.parent && window.parent !== window) {
+        window.parent.postMessage('closeGuide', '*');
+    }
+}
+
+// Event Listeners
+if (document.readyState !== 'loading') {
+    initGuideListeners();
+} else {
+    document.addEventListener('DOMContentLoaded', initGuideListeners);
+}
+
+function initGuideListeners() {
+    const btnCloseGuide = document.getElementById('btn-close-guide');
+    const btnBackToGame = document.getElementById('btn-back-to-game');
+    
+    if (btnCloseGuide) {
+        btnCloseGuide.addEventListener('click', hideGuide);
+    }
+    
+    if (btnBackToGame) {
+        btnBackToGame.addEventListener('click', hideGuide);
+    }
+    
+    // Tutup panduan dengan tombol ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideGuide();
+        }
+    });
+}
