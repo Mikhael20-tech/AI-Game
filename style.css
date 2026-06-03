@@ -38,12 +38,12 @@ body {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text-primary);
     background: var(--bg-gradient);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
-    padding: 20px;
+    overflow: hidden;
+    padding: 10px;
 }
 
 /* Background Animated Orbs */
@@ -80,18 +80,19 @@ body::after {
 #game-container {
     width: 100%;
     max-width: 680px;
+    max-height: 100%;
     background: var(--card-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--card-border);
     border-radius: 24px;
-    padding: 30px;
+    padding: 20px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 0 0 30px var(--card-glow);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
     position: relative;
     overflow: hidden;
 }
@@ -483,6 +484,51 @@ button:active {
     border: none;
     border-radius: 16px;
     background: var(--card-bg);
+}
+
+/* Desktop / Tablet Landscape - 2 Column Layout to prevent scrolling */
+@media (min-width: 768px) {
+    #game-container {
+        max-width: 850px;
+        padding: 25px 30px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "header header"
+            "progress progress"
+            "info info"
+            "camera soal"
+            "camera feedback"
+            "camera status"
+            "camera btn";
+        gap: 15px 25px;
+    }
+    
+    header { grid-area: header; padding-bottom: 5px; }
+    .progress-container { grid-area: progress; margin-top: -5px; }
+    .info-panel { grid-area: info; }
+    
+    .camera-card { 
+        grid-area: camera; 
+        max-height: none;
+        width: 100%;
+        max-width: 380px;
+        margin: 0 auto;
+        align-self: center;
+    }
+    
+    #soal-card { 
+        grid-area: soal;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        min-height: 100px;
+    }
+    
+    #pesan-feedback { grid-area: feedback; align-self: center; }
+    .status-box { grid-area: status; align-self: center; }
+    .btn-container { grid-area: btn; align-self: end; }
 }
 
 /* Mobile responsive fixes */
