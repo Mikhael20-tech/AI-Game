@@ -28,6 +28,24 @@ class SoundEffects {
         osc.stop(this.ctx.currentTime + 0.15);
     }
 
+    playTimerTick() {
+        this.init();
+        if (!this.ctx) return;
+        
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, this.ctx.currentTime); // Nada lebih rendah untuk detik biasa
+        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
+        
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.1);
+    }
+
     playCorrect() {
         this.init();
         if (!this.ctx) return;
@@ -298,7 +316,9 @@ class KuisSistem {
             this.waktu--;
             this.timerContainer.innerHTML = this.waktu;
             if (this.waktu <= 3 && this.waktu > 0) {
-                this.sounds.playTick(); // Tick sound on warning
+                this.sounds.playTick(); // Tick sound on warning (nada lebih tinggi)
+            } else if (this.waktu > 3) {
+                this.sounds.playTimerTick(); // Tick biasa setiap detik
             }
             if (this.waktu <= 0) {
                 clearInterval(this.timerInterval);
