@@ -120,6 +120,38 @@ h1 {
     color: var(--text-secondary);
 }
 
+/* Back Button */
+.btn-back {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: auto;
+    height: 40px;
+    padding: 0 16px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1); /* Warna netral transparan */
+    color: var(--text-primary);
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.btn-back:active {
+    transform: scale(0.95);
+}
+
 /* Guide Button */
 .btn-guide {
     position: absolute;
@@ -953,5 +985,19 @@ button:active {
 
     .btn-primary {
         width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Sembunyikan teks pada tombol, sisakan ikon saja agar hemat tempat */
+    .btn-guide span, .btn-back span {
+        display: none;
+    }
+    
+    /* Ubah tombol menjadi bulat sempurna */
+    .btn-guide, .btn-back {
+        padding: 0;
+        width: 40px;
+        justify-content: center;
     }
 }

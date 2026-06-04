@@ -375,6 +375,25 @@ class KuisSistem {
         this.pesanFeedback.className = "benar";
         this.sounds.playGameOver();
 
+        // ----------------------------------------------------
+        // LOGIKA BARU: MENGUBAH TOMBOL SAAT GAME BERAKHIR
+        // ----------------------------------------------------
+        const btnContainer = document.querySelector('.btn-container');
+        if (btnContainer) {
+            btnContainer.innerHTML = `
+                <div style="display: flex; gap: 15px; width: 100%; margin-top: 5px;">
+                    <button onclick="location.reload()" style="flex: 1; font-size: 14px; padding: 14px 10px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                        MULAI ULANG
+                    </button>
+                    <button onclick="window.location.href='index.html'" style="flex: 1; background: transparent; border: 2px solid var(--danger); box-shadow: none; font-size: 14px; padding: 14px 10px;" onmouseover="this.style.background='var(--danger-bg)'" onmouseout="this.style.background='transparent'">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        BERANDA
+                    </button>
+                </div>
+            `;
+        }
+
         // Release hardware camera resources
         if (this.webcam) {
             this.webcam.stop(); 
@@ -473,19 +492,25 @@ function showGuide() {
 }
 
 // Hide Guide Modal & Send message to parent
+// Hide Guide Modal & Smart Navigation
 function hideGuide() {
     const gameContainer = document.getElementById('game-container');
     const guideContainer = document.getElementById('guide-container');
     
+    // Logika jika elemen berada di halaman yang sama
     if (gameContainer && guideContainer) {
         guideContainer.style.display = 'none';
         gameContainer.style.display = 'flex';
         document.body.style.overflow = 'auto';
     }
     
-    // Kirim pesan ke parent window untuk menutup modal
+    // CEK LOKASI JENDELA (SMART ROUTING)
     if (window.parent && window.parent !== window) {
+        // 1. Jika di dalam iframe (berarti dibuka dari halaman kuis), kirim pesan tutup
         window.parent.postMessage('closeGuide', '*');
+    } else {
+        // 2. Jika bukan di iframe (berarti dibuka dari beranda), arahkan balik ke beranda
+        window.location.href = 'index.html';
     }
 }
 
